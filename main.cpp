@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
     return EXIT_FAILURE;
   }
 
-  std::cout << measure_time(vector) << std::endl;
+  std::cout << max << " " << selection << " " << measure_time(vector) << std::endl;
 
   return EXIT_SUCCESS;
 }

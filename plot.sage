@@ -1,40 +1,61 @@
-def readFile(filename):
-    """Lit un fichier et retourne une liste de listes contenant des floats."""
-    v = []
-    with open(filename) as f:
+from sage.all import *
+import os
+
+def create_plots_directory():
+    if not os.path.exists("./build/plots"):
+        os.makedirs("./build/plots")
+
+def read_file(filename):
+    if not os.path.exists("./build/data/" + filename):
+        print(f"Fichier manquant : {filename}")
+        return []  # Retourne une liste vide si le fichier n'existe pas
+    data = []
+    with open("./build/data/" + filename, 'r') as f:
         for line in f:
-            v.append([float(x) for x in line.split()])
-    return v
+            n, t, time = map(float, line.split())
+            data.append((n, time))
+    return data
 
-def create_curve(tab, color, index):
-  if len(tab) > 1:
-    spline_interpolation = spline(tab)
+def create_plots(algorithm, color):
+    for t in range(1, 4):  
+        fast = Graphics()  
+        slow = Graphics()
+        for idx, alg in enumerate(algorithms):
 
-    curve = plot(spline_interpolation, min(x for x, y in tab), max(x for x, y in tab), color=color, legend_label="vector" + str(index))
-    return curve
+            data = read_file(f"{alg}{t}.data")
+            if not data: 
+                print(f"Aucune donnée pour {alg} - Type {t}")
+                continue
 
-def create_plot(alg):
+            linestyle = {1: "solid", 2: "dashed", 3: "dotted"}[t]
+            color = colors[idx % len(colors)] 
 
-  colors=["green", "pink", "red"]
-  g = Graphics()
+            if(data[len(data) - 1][1] >= 100000):
+                slow += line(data, legend_label=f"{alg} - Vector {t}", linestyle=linestyle, color=color)
+            else:
+                fast += line(data, legend_label=f"{alg} - Vector {t}", linestyle=linestyle, color=color)
 
-  for i in range(1, 4):
-    color = colors[i - 1]
-    tab = []
-    v = readFile(alg + str(i) + ".data") 
-    elements = 1000
+        filename = f"vector_type{t}_{'aleatoire' if t == 1 else 'moitie_trie' if t == 2 else 'moitie_inverse'}.png"
+        
+        print()
+        print(f"Create graphic for vector {t}")
+        if (len(fast) > 0): 
+            fast.show()
+            fast.save("./build/plots/fast_alg_" + filename)  
+        print(f"Save graphic with the name : fast_alg_{filename}")
+        if (len(slow) > 0):
+            slow.show()
+            slow.save("./build/plots/slow_alg_" + filename)
+        print(f"Save graphic with the name : slow_alg_{filename}")
 
-    for elt in v:
-      tab.append((elements, elt[0]))
-      elements += 1000
-    g += create_curve(tab, color, i)     
-    g += point(tab, color=color, size=20)
-  g.axes_label_color((1,1,1))
-  g.save(alg + ".png", title=alg, figsize=(14, 10), axes_labels=['Elements', 'Time (in microsenconds)'], xmax=100000)
 
-algs = ["stdsort", "stable_sort", "qsort", "selection_sort", "insertion_sort", "bubble_sort", "quicksortdet", "quicksortrnd"]
 
-for alg in algs:
-  create_plot(alg)
+algorithms = ["stdsort", "stable_sort", "qsort", "selection_sort", "insertion_sort", "bubble_sort", "quicksortdet", "quicksortrnd"]
+
+# Couleurs pour chaque algorithme
+colors = ["green", "orange", "purple", "cyan", "magenta", "black", "red", "blue"]
+
+create_plots_directory()
+create_plots(algorithms, colors)
 
 

@@ -1,29 +1,56 @@
 #!/bin/bash
+build_directory=$(pwd)/build
+data_directory=$(pwd)/build/data
+sort_directory=$(pwd)/sort
 
-g++ -Wall -Ofast -c main.cpp
+if [[ ! -d $build_directory ]]; then
+    mkdir $build_directory
+    mkdir $data_directory
+fi
+
+echo Check if Sagemath is installed
+if ! command -v sage &> /dev/null; then
+    echo "Error : Sagemath is not installed or is not in the PATH."
+    exit 1
+fi
+
+# Compilation de main.cpp
+g++ -Wall -std=c++17 -Ofast -c -I. main.cpp
+mv main.o $build_directory
+
+# Boucle pour chaque algorithme
 for alg in stdsort stable_sort qsort selection_sort insertion_sort bubble_sort quicksortdet quicksortrnd
 do
-  echo Algorithm: $alg
-  g++ -Wall -Ofast -c ./sort/$alg.cpp
-  g++ -Wall -Ofast -o $alg main.o $alg.o
-  for t in 1 2 3
-  do
-    rm $alg$t.data
-    for i in $(seq 1 100)
+    g++ -Wall -std=c++17 -Ofast -c $sort_directory/$alg.cpp
+    mv $alg.o $build_directory	
+    g++ -Wall -Ofast -o $alg $build_directory/main.o $build_directory/$alg.o
+    mv $alg $build_directory
+
+    for t in 1 2 3
     do
-      n=$((i * 1000))
-      echo $alg $n $t
-      timeout 10m ./$alg $n $t >> $alg$t.data
-      ret=$?
-      if [[ $ret -gt 120 ]]
-      then
-        echo TIMEOUT OR CORE DUMP ON $alg $t
-      break
-      fi
+        rm -f $data_directory/$alg$t.data 
+        echo "Algorithm $alg with the vector $t"
+        for n in $(seq 1000 1000 100000); 
+        do
+            echo "vector of $n elements sorted by sorting: $alg"
+            timeout 10m $build_directory/$alg $n $t >> $data_directory/$alg$t.data
+            
+            ret=$?
+            if [[ $ret -gt 120 ]]; then
+                echo "Time exceeded or fatal error on $alg with the vector $t"
+                break
+            fi
+        done
+
+        if [[ ! -f "$data_directory/$alg$t.data" ]]; then
+            echo "Error : $alg$t.data is missing !"
+        fi
     done
-  done
+    rm -f $build_directory/$alg
 done
 
-rm *.o
-echo Creating plots
+rm -f $build_directory/*.o
+rm -f $build_directory/main
+
+echo "Creation of the plots."
 sage plot.sage
