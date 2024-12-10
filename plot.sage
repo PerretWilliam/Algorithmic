@@ -35,13 +35,13 @@ def create_plots(algorithm, color):
             color = colors[idx % len(colors)] 
             
             # Add the line to the graphics
-            if(alg == "stdsort" or alg == "stable_sort" or alg == "qsort" or alg == "quicksortdet" or alg == "quicksortrnd"): 
+            if(alg == "stdsort" or alg == "stable_sort" or alg == "qsort" or alg == "quicksortrnd"): 
                 fast += line(data, legend_label=f"{alg} - Vector {t}", linestyle=linestyle, color=color, axes_labels=['Vector size', 'time'], title=f"Vector {t}")
             else:
                 slow += line(data, legend_label=f"{alg} - Vector {t}", linestyle=linestyle, color=color, axes_labels=['Vector size', 'time (ms * 10⁷)'], title=f"Vector {t}")
 
         # Create the filename
-        filename = f"vector_type{t}_{'aleatoire' if t == 1 else 'moitie_trie' if t == 2 else 'moitie_inverse'}.png"
+        filename = f"vector_type{t}_{'random' if t == 1 else 'half_sorted' if t == 2 else 'half_sorted_invers'}.png"
         
         print()
 
@@ -57,10 +57,10 @@ def create_plots(algorithm, color):
             print(f"Save graphic with the name : slow_alg_{filename}")
 
 # List of algorithms
-algorithms = ["stdsort", "stable_sort", "qsort", "selection_sort", "insertion_sort", "bubble_sort", "quicksortdet", "quicksortrnd"]
+algorithms = ["stdsort", "stable_sort", "qsort", "selection_sort", "insertion_sort", "bubble_sort", "quicksortdet", "quicksortrnd", "cant_believe_it_sort"]
 
 # Color for each algorithm
-colors = ["green", "orange", "purple", "cyan", "magenta", "black", "red", "blue"]
+colors = ["green", "orange", "purple", "cyan", "magenta", "black", "red", "blue", "brown"]
 
 # Create the plots directory
 create_plots_directory()
