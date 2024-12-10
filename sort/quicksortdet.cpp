@@ -4,7 +4,7 @@
 
 void quickSortDet(std::vector<int> &vector)
 {
-  if (vector.size() > 1)
+  if (vector.size() >= 1)
   {
     int pivot = vector[0];
     std::vector<int> v1, v2, v3;

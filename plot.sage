@@ -22,7 +22,6 @@ def create_plots(algorithm, color):
         # Create the graphics
         fast = Graphics()  
         slow = Graphics()
-        bubble_sort_graph = Graphics()
         
         # Create the lines for each algorithm
         for idx, alg in enumerate(algorithms):
@@ -35,13 +34,11 @@ def create_plots(algorithm, color):
             linestyle = {1: "solid", 2: "dashed", 3: "dotted"}[t]
             color = colors[idx % len(colors)] 
             
-            # Add the line to the graphics there is on for the bubble sort because it is too slow compared to the other algorithms
-            if(alg == "bubble_sort"):
-                bubble_sort_graph += line(data, legend_label=f"{alg} - Vector {t}", linestyle=linestyle, color=color, axes_labels=['Vector size', 'time (ms * 10⁶)'], title=f"Vector {t}")
-            elif(data[len(data) - 1][1] >= 100000):
-                slow += line(data, legend_label=f"{alg} - Vector {t}", linestyle=linestyle, color=color, axes_labels=['Vector size', 'time (ms * 10⁶)'], title=f"Vector {t}")
+            # Add the line to the graphics
+            if(alg == "stdsort" or alg == "stable_sort" or alg == "qsort" or alg == "quicksortdet" or alg == "quicksortrnd"): 
+                fast += line(data, legend_label=f"{alg} - Vector {t}", linestyle=linestyle, color=color, axes_labels=['Vector size', 'time'], title=f"Vector {t}")
             else:
-                fast += line(data, legend_label=f"{alg} - Vector {t}", linestyle=linestyle, color=color, axes_labels=['Vector size', 'time (ms)'], title=f"Vector {t}")
+                slow += line(data, legend_label=f"{alg} - Vector {t}", linestyle=linestyle, color=color, axes_labels=['Vector size', 'time (ms * 10⁷)'], title=f"Vector {t}")
 
         # Create the filename
         filename = f"vector_type{t}_{'aleatoire' if t == 1 else 'moitie_trie' if t == 2 else 'moitie_inverse'}.png"
@@ -58,10 +55,6 @@ def create_plots(algorithm, color):
             slow.show()
             slow.save("./build/plots/slow_alg_" + filename)
             print(f"Save graphic with the name : slow_alg_{filename}")
-        if(len(bubble_sort_graph) > 0):
-            bubble_sort_graph.show()
-            bubble_sort_graph.save("./build/plots/bubble_sort_alg_" + filename)
-            print(f"Save graphic with the name : bubble_sort_alg_{filename}")
 
 # List of algorithms
 algorithms = ["stdsort", "stable_sort", "qsort", "selection_sort", "insertion_sort", "bubble_sort", "quicksortdet", "quicksortrnd"]
