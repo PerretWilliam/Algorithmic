@@ -6,52 +6,52 @@
 
 #include "./sort/sort.hpp"
 
-std::vector<int> ensemble_aleatoire(int max)
+std::vector<int> random_set(int max)
 {
-  std::vector<int> ensemble;
+  std::vector<int> set;
   for (int i = 0; i < max; i++)
   {
-    ensemble.push_back(rand() % (max + 1));
+    set.push_back(rand() % (max + 1));
   }
-  return ensemble;
+  return set;
 }
 
-std::vector<int> ensemble_moitier_trie(int max)
+std::vector<int> half_sorted_set(int max)
 {
-  std::vector<int> ensemble;
+  std::vector<int> set;
   for (int i = 0; i < max; i++)
   {
     if (i < max / 2)
     {
-      ensemble.push_back(i);
+      set.push_back(i);
     }
     else
     {
-      ensemble.push_back(rand() % (max + 1));
+      set.push_back(rand() % (max + 1));
     }
   }
-  return ensemble;
+  return set;
 }
 
-std::vector<int> ensemble_moitier_non_triee(int n)
+std::vector<int> half_unsorted_set(int n)
 {
-  std::vector<int> ensemble;
+  std::vector<int> set;
   for (int i = 0; i < n / 2; ++i)
   {
-    ensemble.push_back(n - i);
+    set.push_back(n - i);
   }
   for (int i = n / 2; i < n; ++i)
   {
-    ensemble.push_back(rand() % (n));
+    set.push_back(rand() % (n));
   }
-  return ensemble;
+  return set;
 }
 
 int main(int argc, char *argv[])
 {
   if (argc == 0)
   {
-    std::cerr << "Pas d'arguement passé en paramètre." << std::endl;
+    std::cerr << "No argument passed as parameter." << std::endl;
     return EXIT_FAILURE;
   }
 
@@ -62,13 +62,13 @@ int main(int argc, char *argv[])
   switch (selection)
   {
   case 1:
-    vector = ensemble_aleatoire(max);
+    vector = random_set(max);
     break;
   case 2:
-    vector = ensemble_moitier_trie(max);
+    vector = half_sorted_set(max);
     break;
   case 3:
-    vector = ensemble_moitier_non_triee(max);
+    vector = half_unsorted_set(max);
     break;
   default:
     return EXIT_FAILURE;

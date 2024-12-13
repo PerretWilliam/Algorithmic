@@ -51,6 +51,7 @@ run_algorithm() {
         fi
     done
     rm -f $build_directory/$alg
+    echo $alg ran successfully.
 }
 
 run_all_algorithms() {
@@ -87,10 +88,13 @@ run_all_algorithms() {
             fi
         done
         rm -f $build_directory/$alg
+        echo $alg ran successfully.
     done
+    echo "All algorithms ran successfully."
     
     echo "Creation of the plots."
     sage plot.sage
+    echo "Plots created."
 }
 
 # Menu
@@ -124,6 +128,7 @@ case $choice in
         # Create the plots
         echo "Creation of the plots."
         sage plot.sage
+        echo "Plots created."
         ;;
     4)
         echo Quitting.
@@ -138,3 +143,4 @@ esac
 rm -f $build_directory/*.o
 rm -f $build_directory/main
 rm -f plot.sage.py
+echo "Clean up done."

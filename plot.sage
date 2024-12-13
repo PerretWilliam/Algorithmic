@@ -7,8 +7,8 @@ def create_plots_directory():
 
 def read_file(filename):
     if not os.path.exists("./build/data/" + filename):
-        print(f"Fichier manquant : {filename}")
-        return []  # Retourne une liste vide si le fichier n'existe pas
+        print(f"Missing file: {filename}")
+        return []  # Return an empty list if the file does not exist
     data = []
     with open("./build/data/" + filename, 'r') as f:
         for line in f:
