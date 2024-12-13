@@ -85,6 +85,7 @@ run_all_algorithms() {
 
             if [[ ! -f "$data_directory/$alg$t.data" ]]; then
                 echo "Error : $alg$t.data is missing !"
+                exit 1
             fi
         done
         rm -f $build_directory/$alg
