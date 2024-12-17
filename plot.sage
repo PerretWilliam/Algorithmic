@@ -35,8 +35,13 @@ def create_plots(algorithm, color):
             color = colors[idx % len(colors)] 
             
             # Add the line to the graphics
-            if(alg == "stdsort" or alg == "stable_sort" or alg == "qsort" or alg== "quicksortdet" or alg == "quicksortrnd"): 
+            if(alg == "stdsort" or alg == "stable_sort" or alg == "qsort" or alg == "quicksortrnd"): 
                 fast += line(data, legend_label=f"{alg} - Vector {t}", linestyle=linestyle, color=color, axes_labels=['Vector size', 'time'], title=f"Vector {t}")
+            elif(alg == "quicksortdet"):
+                if(t==1):
+                    fast += line(data, legend_label=f"{alg} - Vector {t}", linestyle=linestyle, color=color, axes_labels=['Vector size', 'time (ms * 10⁷)'], title=f"Vector {t}")
+                else:
+                    slow += line(data, legend_label=f"{alg} - Vector {t}", linestyle=linestyle, color=color, axes_labels=['Vector size', 'time (ms * 10⁷)'], title=f"Vector {t}")
             else:
                 slow += line(data, legend_label=f"{alg} - Vector {t}", linestyle=linestyle, color=color, axes_labels=['Vector size', 'time (ms * 10⁷)'], title=f"Vector {t}")
 
