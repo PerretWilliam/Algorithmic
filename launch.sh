@@ -34,7 +34,7 @@ run_algorithm() {
     do
         rm -f $data_directory/$alg$t.data 
         echo "Algorithm $alg with the vector $t"
-        for n in $(seq 1000 1000 100000); 
+        for n in $(seq 1000 100 100000); 
         do
             echo "vector $t of $n elements sorted by : $alg"
             timeout 10m $build_directory/$alg $n $t >> $data_directory/$alg$t.data
@@ -50,6 +50,7 @@ run_algorithm() {
             echo "Error : $alg$t.data is missing !"
         fi
     done
+    echo "Algorithm $alg has been run."
     rm -f $build_directory/$alg
 }
 
@@ -89,8 +90,11 @@ run_all_algorithms() {
         rm -f $build_directory/$alg
     done
     
+    echo "All algorithms have been run."
+
     echo "Creation of the plots."
     sage plot.sage
+    echo "Plots have been created."
 }
 
 # Menu
@@ -124,6 +128,7 @@ case $choice in
         # Create the plots
         echo "Creation of the plots."
         sage plot.sage
+        echo "Plots have been created."
         ;;
     4)
         echo Quitting.
@@ -138,3 +143,6 @@ esac
 rm -f $build_directory/*.o
 rm -f $build_directory/main
 rm -f plot.sage.py
+echo File cleanup complete.
+
+exit 0
