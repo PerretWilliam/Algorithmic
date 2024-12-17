@@ -52,6 +52,7 @@ run_algorithm() {
     done
     echo "Algorithm $alg has been run."
     rm -f $build_directory/$alg
+    echo $alg ran successfully.
 }
 
 run_all_algorithms() {
@@ -85,9 +86,11 @@ run_all_algorithms() {
 
             if [[ ! -f "$data_directory/$alg$t.data" ]]; then
                 echo "Error : $alg$t.data is missing !"
+                exit 1
             fi
         done
         rm -f $build_directory/$alg
+        echo $alg ran successfully.
     done
     
     echo "All algorithms have been run."

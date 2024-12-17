@@ -7,8 +7,8 @@ def create_plots_directory():
 
 def read_file(filename):
     if not os.path.exists("./build/data/" + filename):
-        print(f"Fichier manquant : {filename}")
-        return []  # Retourne une liste vide si le fichier n'existe pas
+        print(f"Missing file: {filename}")
+        return []  # Return an empty list if the file does not exist
     data = []
     with open("./build/data/" + filename, 'r') as f:
         for line in f:
@@ -27,7 +27,7 @@ def create_plots(algorithm, color):
         for idx, alg in enumerate(algorithms):
             data = read_file(f"{alg}{t}.data")
             if not data: 
-                print(f"Aucune donnée pour {alg} - Type {t}")
+                print(f"No data for {alg} - Type {t}")
                 continue
 
             # Create the line
@@ -35,7 +35,7 @@ def create_plots(algorithm, color):
             color = colors[idx % len(colors)] 
             
             # Add the line to the graphics
-            if(alg == "stdsort" or alg == "stable_sort" or alg == "qsort" or alg == "quicksortrnd"): 
+            if(alg == "stdsort" or alg == "stable_sort" or alg == "qsort" or alg== "quicksortdet" or alg == "quicksortrnd"): 
                 fast += line(data, legend_label=f"{alg} - Vector {t}", linestyle=linestyle, color=color, axes_labels=['Vector size', 'time'], title=f"Vector {t}")
             else:
                 slow += line(data, legend_label=f"{alg} - Vector {t}", linestyle=linestyle, color=color, axes_labels=['Vector size', 'time (ms * 10⁷)'], title=f"Vector {t}")
